@@ -61,12 +61,12 @@ $result2 = $conexion->query($sql);
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pokedex Modificada</title>
-    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
 <div class="header">
-    <img src="../img/pokedexLogo.png" alt="Pokedex Logo">
+    <img src="img/pokedexLogo.png" alt="Pokedex Logo">
 </div>
 
 <div class="container">
@@ -105,7 +105,9 @@ $result2 = $conexion->query($sql);
         // Mostrar los datos de cada Pokémon
         while($row = $result2->fetch_assoc()) {
             echo '<div class="pokemon-item">';
+            echo '<a href="Detalles.php?id=' . $row["numero"] . '">';
             echo '<img src="img/pokemon/' . $row["imagen"] . '" alt="' . $row["nombre"] . '" class="pokemon-img">';
+            echo '</a>';
             echo '<h3 class="pokemon-name">' . $row["nombre"] . '</h3>';
             echo '<p class="pokemon-number">Número: ' . $row["numero"] . '</p>';
             $tipos = explode(',', $row["tipos"]);
@@ -123,7 +125,7 @@ $result2 = $conexion->query($sql);
 <!-- Footer -->
 <div class="footer">
     <div class="footer-logo">
-        <img src="../pokedexLogo.png" alt="PokeInfo Logo">
+        <img src="img/pokedexLogo.png" alt="PokeInfo Logo">
     </div>
     <div class="footer-content">
         <div class="section">
