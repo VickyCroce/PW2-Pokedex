@@ -3,24 +3,17 @@ require_once 'BaseDeDatos/Database.php';
 
 $conexion = new database();
 
-// Consulta para obtener los Pokémon
-$sql = "SELECT p.nombre, p.numero, p.imagen, GROUP_CONCAT(t.nombre_p SEPARATOR ',') as tipos
-        FROM pokemon p
-        JOIN pokemon_tipo pt ON p.id = pt.pokemon_id
-        JOIN tipo t ON pt.tipo_id = t.id
-        GROUP BY p.id
-        ORDER BY p.numero ASC";
-$result2 = $conexion->query($sql);
-
-//busqueda
+// Inicializamos variables de búsqueda y filtro
 $search = "";
+$order_by = "numero ASC"; // Orden por defecto
+
+// Verificamos si hay búsqueda
 if (isset($_GET['search'])) {
-    // Escapa el valor de búsqueda para evitar inyecciones SQL
+    // Escapamos el valor de búsqueda para evitar inyecciones SQL
     $search = $conexion->escape($_GET['search']);
 }
 
-// Verifica si se ha seleccionado un filtro
-$order_by = "numero ASC"; // Orden por defecto
+// Verificamos si se ha seleccionado un filtro
 if (isset($_GET['filter'])) {
     $filter = $_GET['filter'];
 
@@ -40,18 +33,26 @@ if (isset($_GET['filter'])) {
     }
 }
 
-//  cambia según el valor de búsqueda y el filtro
-$sql = "SELECT numero, nombre, imagen FROM pokemon";
+// Construimos la consulta SQL combinando búsqueda y filtro
+$sql = "SELECT p.nombre, p.numero, p.imagen, GROUP_CONCAT(t.nombre_p SEPARATOR ',') as tipos
+        FROM pokemon p
+        JOIN pokemon_tipo pt ON p.id = pt.pokemon_id
+        JOIN tipo t ON pt.tipo_id = t.id";
+
+// Añadimos la condición de búsqueda si existe
 if ($search != "") {
-    // Búsqueda por nombre o número
     if (is_numeric($search)) {
-        $sql .= " WHERE numero = '$search'";
+        $sql .= " WHERE p.numero = '$search'";
     } else {
-        $sql .= " WHERE nombre LIKE '%$search%'";
+        $sql .= " WHERE p.nombre LIKE '%$search%'";
     }
 }
-$sql .= " ORDER BY $order_by";
-$result = $conexion->query($sql);
+
+// Ordenamos según el filtro
+$sql .= " GROUP BY p.id ORDER BY $order_by";
+
+// Ejecutamos la consulta
+$result2 = $conexion->query($sql);
 ?>
 
 <!DOCTYPE html>
@@ -65,29 +66,33 @@ $result = $conexion->query($sql);
 <body>
 
 <div class="header">
-    <img src="../pokedexLogo.png" alt="Pokedex Logo">
+    <img src="../img/pokedexLogo.png" alt="Pokedex Logo">
 </div>
 
 <div class="container">
     <!-- buscador -->
-    <div class="search-bar"">
-    <form method="GET" action="">
-        <input type="text" name="search" placeholder="Buscar Pokémon por nombre o número" value="<?php echo htmlspecialchars($search); ?>">
-        <button type="submit">Buscar</button>
-    </form>
-</div>
+    <div class="search-bar">
+        <form method="GET" action="">
+            <input type="text" name="search" placeholder="Buscar Pokémon por nombre o número" value="<?php echo htmlspecialchars($search); ?>">
+            <button type="submit">Buscar</button>
+        </form>
+    </div>
 
+    <!-- Filtro de orden -->
+    <div class="filter">
+        <form method="GET" action="">
+            <!-- Mantener el valor de búsqueda -->
+            <input type="hidden" name="search" value="<?php echo htmlspecialchars($search); ?>">
 
-<!-- Filtro de orden -->
-<div class="filter">
-    Ordenar por:
-    <select>
-        <option value="numero-inferior">Número Inferior</option>
-        <option value="numero-superior">Número Superior</option>
-        <option value="a-z">A-Z</option>
-        <option value="z-a">Z-A</option>
-    </select>
-</div>
+            Ordenar por:
+            <select name="filter" onchange="this.form.submit()">
+                <option value="numero_asc" <?php echo (isset($_GET['filter']) && $_GET['filter'] == 'numero_asc') ? 'selected' : ''; ?>>Número Inferior</option>
+                <option value="numero_desc" <?php echo (isset($_GET['filter']) && $_GET['filter'] == 'numero_desc') ? 'selected' : ''; ?>>Número Superior</option>
+                <option value="nombre_asc" <?php echo (isset($_GET['filter']) && $_GET['filter'] == 'nombre_asc') ? 'selected' : ''; ?>>A-Z</option>
+                <option value="nombre_desc" <?php echo (isset($_GET['filter']) && $_GET['filter'] == 'nombre_desc') ? 'selected' : ''; ?>>Z-A</option>
+            </select>
+        </form>
+    </div>
 </div>
 
 
