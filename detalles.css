@@ -1,0 +1,92 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f9f9f9;
+    margin: 0;
+    padding: 0;
+}
+/*HEADER*/
+.header {
+    background-color: #E3350D;
+    padding: 20px;
+    text-align: center;
+}
+
+.header img {
+    max-width: 200px;
+    height: auto;
+}
+
+/*DESCRIPCION POKEMONES*/
+h1{
+    margin-left: 50px;
+    font-size: 40px;
+}
+
+.contenedor{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 50px;
+    background: no-repeat;
+    background-image: url("img/jardin.jpg") ;
+    background-size: cover;
+}
+
+.pokemon{
+    width: 550px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #f3de75;
+    border: solid 2px black;
+    padding: 10px;
+}
+
+#imgTipo{
+    width: 100px;
+}
+
+#descripcion{
+    font-size: 20px;
+    margin-left: 10px;
+
+}
+
+/*FOOTER*/
+.footer {
+    background-color: #FF0000;
+    color: white;
+    text-align: center;
+    padding: 20px 0; /* Más pequeño que el original */
+    font-size: 14px; /* Reducimos el tamaño de fuente */
+    position: relative;
+    bottom: 0;
+    width: 100%;
+}
+.footer .footer-logo {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 10px;
+}
+.footer .footer-logo img {
+    max-width: 120px; /* Ajustamos el tamaño del logo */
+    height: auto;
+}
+.footer .footer-content {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    max-width: 900px; /* Ancho máximo del contenido del footer */
+    margin: 0 auto; /* Centra el contenido */
+    flex-wrap: wrap;
+}
+.footer .section {
+    flex: 1;
+    margin-bottom: 10px;
+}
+.footer .section h4 {
+    margin: 5px 0;
+}
+.footer .section p {
+    margin: 0;
+}

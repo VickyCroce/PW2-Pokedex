@@ -22,7 +22,8 @@ class Database{
     public function escape($string) {
         return $this->conexion->real_escape_string($string);
     }
-    public function __destruc(){
+
+    public function __destruct(){
         $this->conexion->close();
     }
 }
