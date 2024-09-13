@@ -1,5 +1,5 @@
 <?php
-include("BaseDeDatos/Conexion.php");
+include("BaseDeDatos/Database.php");
 
 /*$conexion = conectar();
 echo "se realizo un conexion con la base de datos";*/

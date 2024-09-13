@@ -1,0 +1,164 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f9f9f9;
+    margin: 0;
+    padding: 0;
+}
+.header {
+    background-color: #E3350D;
+    padding: 20px;
+    text-align: center;
+}
+
+.header img {
+    max-width: 200px;
+    height: auto;
+}
+.container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    background-color: #eee;
+    flex-wrap: wrap; /* Para que los elementos se acomoden en pantallas pequeñas */
+}
+.search-bar {
+    display: flex;
+    flex: 1;
+    margin-bottom: 10px; /* Margen para cuando esté en modo móvil */
+}
+.search-bar input[type="text"] {
+    width: 50%;
+    padding: 10px;
+    margin-right: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+.search-bar button {
+    padding: 10px 20px;
+    background-color: #f8e042;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+.filter {
+    margin-left: 20px;
+    margin-right: 100px;
+}
+.filter select {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+.pokemon-list {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr); /* 4 columnas por defecto */
+    gap: 10px;
+    padding: 20px;
+}
+.pokemon-item {
+    background-color: white;
+    padding: 15px;
+    text-align: center;
+    border: 1px solid #ddd;
+}
+.pokemon-img {
+    width: 100px;
+    height: 100px;
+}
+.pokemon-number {
+    font-weight: bold;
+    color: #555;
+    margin-top: 5px;
+}
+.pokemon-name {
+    font-weight: bold;
+    margin-top: 5px;
+}
+.pokemon-type {
+    margin-top: 5px;
+    font-size: 14px;
+    color: #888;
+}
+
+.pokemon-type img {
+    width: 12px;
+}
+
+
+
+/*FOOTER*/
+.footer {
+    background-color: #FF0000;
+    color: white;
+    text-align: center;
+    padding: 20px 0; /* Más pequeño que el original */
+    font-size: 14px; /* Reducimos el tamaño de fuente */
+    position: relative;
+    bottom: 0;
+    width: 100%;
+}
+.footer .footer-logo {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 10px;
+}
+.footer .footer-logo img {
+    max-width: 120px; /* Ajustamos el tamaño del logo */
+    height: auto;
+}
+.footer .footer-content {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    max-width: 900px; /* Ancho máximo del contenido del footer */
+    margin: 0 auto; /* Centra el contenido */
+    flex-wrap: wrap;
+}
+.footer .section {
+    flex: 1;
+    margin-bottom: 10px;
+}
+.footer .section h4 {
+    margin: 5px 0;
+}
+.footer .section p {
+    margin: 0;
+}
+
+/* Estilos responsivos */
+@media (max-width: 1200px) {
+    .pokemon-list {
+        grid-template-columns: repeat(3, 1fr); /* 3 columnas en pantallas medianas */
+    }
+}
+@media (max-width: 768px) {
+    .container {
+        flex-direction: column; /* Alinea los elementos en columna en pantallas pequeñas */
+        align-items: stretch;
+    }
+    .pokemon-list {
+        grid-template-columns: repeat(2, 1fr); /* 2 columnas en pantallas pequeñas */
+    }
+
+    footer .footer-content {
+        flex-direction: column;
+
+    }
+    .footer .section {
+        margin-bottom: 15px;
+    }
+}
+@media (max-width: 480px) {
+    .pokemon-list {
+        grid-template-columns: 1fr; /* 1 columna en pantallas muy pequeñas (móviles) */
+    }
+    .filter {
+        margin-left: 0;
+        margin-top: 10px;
+    }
+    .search-bar {
+        margin-bottom: 0;
+    }
+}
