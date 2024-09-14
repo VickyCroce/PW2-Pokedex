@@ -111,9 +111,7 @@ $result2 = $conexion->query($sql);
             echo '<a href="borrar.php?id=' . $row["numero"] . '" class="action-btn"><img src="img/eliminar.png" alt="Borrar" title="Borrar" class="action-icon"></a>';
             echo '</div>';
 
-            echo '<a href="Detalles.php?id=' . $row["numero"] . '">';
-            echo '<img src="img/pokemon/' . $row["imagen"] . '" alt="' . $row["nombre"] . '" class="pokemon-img">';
-            echo '</a>';
+            echo '<a href="Detalles.php?id=' . $row["numero"] . '"><img src="img/pokemon/' . $row["imagen"] . '" alt="' . $row["nombre"] . '" class="pokemon-img"></a>';
             echo '<h3 class="pokemon-name">' . $row["nombre"] . '</h3>';
             echo '<p class="pokemon-number">Número: ' . $row["numero"] . '</p>';
             $tipos = explode(',', $row["tipos"]);
