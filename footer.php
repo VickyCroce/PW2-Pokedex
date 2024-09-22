@@ -10,7 +10,8 @@
 <!-- Footer -->
 <div class="footer">
     <div class="footer-logo">
-        <img src="../pokedexLogo.png" alt="PokeInfo Logo">
+        <img src="img/pokedexLogo.png" alt="PokeInfo Logo">
+
     </div>
     <div class="footer-content">
         <div class="section">

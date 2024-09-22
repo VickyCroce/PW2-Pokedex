@@ -47,6 +47,13 @@ $filtro = isset($_GET['filtro']) ? $_GET['filtro'] : "";
 
 <!-- Lista de Pokémon -->
 <div class="pokemon-list">
+    <?php if (isset($_GET['mensaje'])): ?>
+        <div class="mensaje <?php echo (strpos($_GET['mensaje'], 'correctamente') !== false) ? 'exito' : 'error'; ?>">
+            <?php echo htmlspecialchars($_GET['mensaje']); ?>
+        </div>
+    <?php endif; ?>
+
+
     <?php
     $pokedex->mostrarListaPokemon($buscador, $filtro);
     ?>
@@ -55,8 +62,7 @@ $filtro = isset($_GET['filtro']) ? $_GET['filtro'] : "";
 <div class="add-pokemon">
     <a href="agregar.php" class="add-pokemon-btn">+ Agregar Pokémon</a>
 </div>
-</div>
-
 <?php require_once 'footer.php';?>
 </body>
 </html>
+
