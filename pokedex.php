@@ -61,7 +61,6 @@ class Pokedex {
                 echo '</div>';
 
                 echo '<img src="img/pokemon/' . $row["imagen"] . '" alt="' . $row["nombre"] . '" class="pokemon-img">';
-                echo '<a href="Detalles.php?id=' . $row["numero"] . '" class="pokemon-name">'. $row["nombre"] . '</a>';
                 echo '<p class="pokemon-number">Número: ' . $row["numero"] . '</p>';
 
                 // Mostrar tipos de Pokémon
