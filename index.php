@@ -53,6 +53,7 @@ $filtro = isset($_GET['filtro']) ? $_GET['filtro'] : "";
         </div>
     <?php endif; ?>
 
+
     <?php
     $pokedex->mostrarListaPokemon($buscador, $filtro);
     ?>
@@ -61,7 +62,7 @@ $filtro = isset($_GET['filtro']) ? $_GET['filtro'] : "";
 <div class="add-pokemon">
     <a href="agregar.php" class="add-pokemon-btn">+ Agregar Pokémon</a>
 </div>
-
 <?php require_once 'footer.php';?>
 </body>
 </html>
+

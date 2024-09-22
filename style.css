@@ -94,8 +94,11 @@ body {
 
 .pokemon-number {
     font-weight: bold;
-    color: #555;
-    margin-top: 5px;
+    color: #19191a;
+    margin-top: 10px;
+    margin-bottom: 5px;
+    text-decoration: none; /* Sin subrayado */
+    display: block;
 }
 
 .pokemon-type {
@@ -274,6 +277,12 @@ select {
     border: 1px solid #f5c6cb;
 }
 
+.action-icon {
+    width: 24px;
+    height: 24px;
+    cursor: pointer;
+    opacity: 0.8;
+}
 
 /* Responsividad */
 @media (max-width: 768px) {

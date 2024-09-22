@@ -4,13 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pokedex Modificada</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="../style.css">
 </head>
 <body>
 <!-- Footer -->
 <div class="footer">
     <div class="footer-logo">
         <img src="img/pokedexLogo.png" alt="PokeInfo Logo">
+
     </div>
     <div class="footer-content">
         <div class="section">
