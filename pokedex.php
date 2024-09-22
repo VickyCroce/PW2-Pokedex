@@ -59,7 +59,8 @@ class Pokedex {
                 echo '<a href="editar.php?id=' . $row["numero"] . '" class="action-btn"><img src="img/editar.png" alt="Editar" title="Editar" class="action-icon"></a>';
                 echo '<a href="borrar.php?id=' . $row["numero"] . '" class="action-btn"><img src="img/eliminar.png" alt="Borrar" title="Borrar" class="action-icon"></a>';
                 echo '</div>';
-
+                
+                echo '<a href="Detalles.php?id=' . $row["numero"] . '" class="pokemon-name">'. $row["nombre"] . '</a>';
                 echo '<img src="img/pokemon/' . $row["imagen"] . '" alt="' . $row["nombre"] . '" class="pokemon-img">';
                 echo '<p class="pokemon-number">Número: ' . $row["numero"] . '</p>';
 
