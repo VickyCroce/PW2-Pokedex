@@ -76,8 +76,52 @@ class Pokedex {
             echo "<p>No se encontraron Pokémon.</p>";
         }
     }
+
+    public function agregarPokemon($nombre, $numero, $descripcion, $imagen, $tipos) {
+        $nombreImagen = basename($imagen['name']);
+        $rutaImagen = 'img/pokemon/' . $nombreImagen;
+
+        if (!move_uploaded_file($imagen['tmp_name'], $rutaImagen)) {
+            return "Error al subir la imagen.";
+        }
+
+        $sql = "INSERT INTO pokemon (nombre, numero, descripcion, imagen) VALUES ('$nombre', '$numero', '$descripcion', '$nombreImagen')";
+
+        if ($this->conexion->query($sql)) {
+            $pokemon_id = $this->conexion->conexion->insert_id;
+
+            foreach ($tipos as $tipo) {
+                $sql_tipo = "SELECT id FROM tipo WHERE nombre_p = '$tipo'";
+                $resultado_tipo = $this->conexion->query($sql_tipo);
+
+                if ($resultado_tipo->num_rows > 0) {
+                    $row = $resultado_tipo->fetch_assoc();
+                    $tipo_id = $row['id'];
+
+                    $sql_relacion = "INSERT INTO pokemon_tipo (pokemon_id, tipo_id) VALUES ('$pokemon_id', '$tipo_id')";
+                    $this->conexion->query($sql_relacion);
+                }
+            }
+
+            return "Pokémon agregado correctamente";
+        } else {
+            return "Error al insertar en la base de datos.";
+        }
+    }
+
+    public function eliminarPokemon($numero) {
+        $sql_eliminar_relaciones = "DELETE FROM pokemon_tipo WHERE pokemon_id = (SELECT id FROM pokemon WHERE numero = '$numero')";
+        if ($this->conexion->query($sql_eliminar_relaciones)) {
+
+            $sql_eliminar_pokemon = "DELETE FROM pokemon WHERE numero = '$numero'";
+            if ($this->conexion->query($sql_eliminar_pokemon)) {
+                return "Pokémon eliminado correctamente.";
+            } else {
+                return "Error al eliminar el Pokémon.";
+            }
+        } else {
+            return "Error al eliminar las relaciones del Pokémon.";
+        }
+    }
 }
 ?>
-
-
-
