@@ -10,6 +10,8 @@
 
 <div class="header">
     <img src="../pokedexLogo.png" alt="Pokedex Logo">
+    <a href="login.php" class="login-button">Login</a>
+
 </div>
 </body>
 </html>
