@@ -16,6 +16,7 @@ $filtro = isset($_GET['filtro']) ? $_GET['filtro'] : "";
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pokedex Modificada</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="icon" href="img/pokebolaLogo.png" type="image/png">
     <link rel="stylesheet" href="popup.css">
 </head>
 <body>

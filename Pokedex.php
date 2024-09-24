@@ -136,7 +136,7 @@ class Pokedex {
             return "Error al eliminar las relaciones del Pokémon.";
         }
     }
-}
+
 
     public function agregarPokemon($nombre, $numero, $descripcion, $imagen, $tipos) {
         $nombreImagen = basename($imagen['name']);
