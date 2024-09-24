@@ -59,15 +59,10 @@ class Pokedex {
                 echo '<a href="editar.php?id=' . $row["id"] . '" class="action-btn"><img src="img/editar.png" alt="Editar" title="Editar" class="action-icon"></a>';
                 echo '<a href="borrar.php?id=' . $row["id"] . '" class="action-btn"><img src="img/eliminar.png" alt="Borrar" title="Borrar" class="action-icon"></a>';
                 echo '</div>';
-
                 
-                echo '<a href="Detalles.php?id=' . $row["numero"] . '" class="pokemon-name">'. $row["nombre"] . '</a>';
-                echo '<img src="img/pokemon/' . $row["imagen"] . '" alt="' . $row["nombre"] . '" class="pokemon-img">';
-=======
-
                 echo '<img src="img/pokemon/' . $row["imagen"] . '" alt="' . $row["nombre"] . '" class="pokemon-img">';
                 echo '<a href="Detalles.php?id=' . $row["id"] . '" class="pokemon-name">'. $row["nombre"] . '</a>';
->>>>>>> feature/home
+
                 echo '<p class="pokemon-number">Número: ' . $row["numero"] . '</p>';
 
                 // Mostrar tipos de Pokémon
