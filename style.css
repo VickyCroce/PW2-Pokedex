@@ -256,6 +256,12 @@ select {
     transform: scale(1.1);
 }
 
+.container-msj{
+    display: flex;
+    justify-content: center;
+    margin-top: 2rem;
+}
+
 .mensaje {
     padding: 15px;
     margin-bottom: 20px;
