@@ -26,8 +26,7 @@ $filtro = isset($_GET['filtro']) ? $_GET['filtro'] : "";
     <!-- Buscador -->
     <div class="search-bar">
         <form method="GET" action="">
-            <input type="text" name="search" placeholder="Buscar Pokémon por nombre o número"
-                   value="<?php echo htmlspecialchars($buscador); ?>">
+            <input type="text" name="search" class="buscador" placeholder="Buscar Pokémon por nombre o número" value="<?php echo htmlspecialchars($buscador); ?>">
             <button type="submit">Buscar</button>
         </form>
     </div>

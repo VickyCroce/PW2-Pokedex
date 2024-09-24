@@ -28,7 +28,7 @@ class Pokedex {
             }
         }
 
-        $sql = "SELECT p.nombre, p.numero, p.imagen, GROUP_CONCAT(t.nombre_p SEPARATOR ',') as tipos
+        $sql = "SELECT p.id,p.nombre, p.numero, p.imagen, GROUP_CONCAT(t.nombre_p SEPARATOR ',') as tipos
                 FROM pokemon p
                 JOIN pokemon_tipo pt ON p.id = pt.pokemon_id
                 JOIN tipo t ON pt.tipo_id = t.id";
@@ -56,12 +56,13 @@ class Pokedex {
 
                 // Botones de editar y borrar
                 echo '<div class="pokemon-actions">';
-                echo '<a href="editar.php?id=' . $row["numero"] . '" class="action-btn"><img src="img/editar.png" alt="Editar" title="Editar" class="action-icon"></a>';
-                echo '<a href="borrar.php?id=' . $row["numero"] . '" class="action-btn"><img src="img/eliminar.png" alt="Borrar" title="Borrar" class="action-icon"></a>';
+                echo '<a href="editar.php?id=' . $row["id"] . '" class="action-btn"><img src="img/editar.png" alt="Editar" title="Editar" class="action-icon"></a>';
+                echo '<a href="borrar.php?id=' . $row["id"] . '" class="action-btn"><img src="img/eliminar.png" alt="Borrar" title="Borrar" class="action-icon"></a>';
                 echo '</div>';
-
+                
                 echo '<img src="img/pokemon/' . $row["imagen"] . '" alt="' . $row["nombre"] . '" class="pokemon-img">';
-                echo '<a href="detalles.php" class="pokemon-name">' . $row["nombre"] . '</a>';
+                echo '<a href="Detalles.php?id=' . $row["id"] . '" class="pokemon-name">'. $row["nombre"] . '</a>';
+
                 echo '<p class="pokemon-number">Número: ' . $row["numero"] . '</p>';
 
                 // Mostrar tipos de Pokémon
