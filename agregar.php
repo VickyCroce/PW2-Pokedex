@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Agregar Pokemón</title>
+    <title><?php echo isset($_GET['id']) ? 'Editar Pokémon' : 'Agregar Pokémon'; ?></title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -11,29 +11,29 @@
 <?php require_once 'header.php'; ?>
 
 <div class="container-add">
-    <h1>Agregar Pokémon</h1>
+    <h1><?php echo isset($_GET['id']) ? 'Editar Pokémon' : 'Agregar Pokémon'; ?></h1>
 
     <div id="mensaje" class="mensaje" style="display: none;"></div>
     <form action="agregar.php" method="POST" enctype="multipart/form-data" class="form-add">
         <div class="form-group-doble">
             <div class="form-group-add-nombre">
                 <label for="nombre">Nombre del Pokémon:</label>
-                <input type="text" name="nombre" id="nombre" required>
+                <input type="text" name="nombre" id="nombre" required value="<?php echo isset($pokemon) ? htmlspecialchars($pokemon['nombre']) : ''; ?>">
             </div>
 
             <div class="form-group-add">
                 <label for="numero">Número del Pokémon:</label>
-                <input type="number" name="numero" id="numero" required>
+                <input type="number" name="numero" id="numero" required value="<?php echo isset($pokemon) ? htmlspecialchars($pokemon['numero']) : ''; ?>">
             </div>
         </div>
         <div class="form-group-add">
             <label for="descripcion">Descripción del Pokémon:</label>
-            <textarea name="descripcion" id="descripcion" required></textarea>
+            <textarea name="descripcion" id="descripcion" required><?php echo isset($pokemon) ? htmlspecialchars($pokemon['descripcion']) : ''; ?></textarea>
         </div>
 
         <div class="form-group-add">
             <label for="imagen">Imagen del Pokémon:</label>
-            <input type="file" name="imagen" id="imagen" accept="image/*" required>
+            <input type="file" name="imagen" id="imagen" accept="image/*" <?php echo !isset($pokemon) ? 'required' : ''; ?>>
         </div>
 
         <div class="form-group-add">
@@ -54,18 +54,22 @@
                     }
                 }
                 ?>
-                <input type="hidden" id="tipos_seleccionados" name="tipos">
-
+                <input type="hidden" id="tipos_seleccionados" name="tipos" value="<?php echo isset($pokemon) ? htmlspecialchars(implode(',', $pokemon['tipos'])) : ''; ?>">
             </div>
         </div>
 
-        <button type="submit" class="add-pokemon-btn">Agregar Pokémon</button>
+        <button type="submit" class="add-pokemon-btn"><?php echo isset($pokemon) ? 'Guardar Cambios' : 'Agregar Pokémon'; ?></button>
 
         <?php
         require_once 'Pokedex.php';
 
         $pokedex = new Pokedex();
         $mensaje = '';
+
+        if (isset($_GET['id']) && is_numeric($_GET['id'])) {
+            $id = $_GET['id'];
+            $pokemon = $pokedex->buscarPokemonPorId($id); // Asumiendo que tienes un método para buscar por ID
+        }
 
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             if (isset($_POST['nombre'], $_POST['numero'], $_POST['descripcion']) && isset($_FILES['imagen']) && !empty($_POST['tipos'])) {
@@ -75,7 +79,11 @@
                 $tipos = explode(',', $_POST['tipos']);
                 $imagen = $_FILES['imagen'];
 
-                $resultado = $pokedex->agregarPokemon($nombre, $numero, $descripcion, $imagen, $tipos);
+                if (isset($_GET['id'])) {
+                    $resultado = $pokedex->editarPokemon($id, $nombre, $numero, $descripcion, $imagen, $tipos); // Método para editar Pokémon
+                } else {
+                    $resultado = $pokedex->agregarPokemon($nombre, $numero, $descripcion, $imagen, $tipos);
+                }
 
                 $mensaje = $resultado;
                 $tipo_mensaje = (strpos($resultado, 'correctamente') !== false) ? 'exito' : 'error';
