@@ -4,7 +4,7 @@ require_once 'pokedex.php';
 
 $pokedex = new Pokedex();
 
-$buscador = isset($_GET['buscador']) ? $_GET['buscador'] : "";
+$buscador = isset($_GET['search']) ? $_GET['search'] : '';
 $filtro = isset($_GET['filtro']) ? $_GET['filtro'] : "";
 
 ?>
@@ -35,7 +35,7 @@ $filtro = isset($_GET['filtro']) ? $_GET['filtro'] : "";
     <!-- Filtro de orden -->
     <div class="filter">
         <form method="GET" action="">
-            <input type="hidden" name="buscador" value="<?php echo htmlspecialchars($buscador); ?>">
+            <input type="hidden" name="search" value="<?php echo htmlspecialchars($buscador); ?>">
             Ordenar por:
             <select name="filtro" onchange="this.form.submit()">
                 <option value="numero_asc" <?php echo ($filtro == 'numero_asc') ? 'selected' : ''; ?>>Número Inferior
