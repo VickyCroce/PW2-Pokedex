@@ -12,89 +12,126 @@
 
 <?php require_once 'header.php'; ?>
 
+<a href="index.php" class="back-arrow">&#8592; Volver</a>
+
 <div class="container-add">
     <h1><?php echo isset($_GET['id']) ? 'Editar Pokémon' : 'Agregar Pokémon'; ?></h1>
 
+
+    <?php
+    require_once 'Pokedex.php';
+    $pokedex = new Pokedex();
+
+    $pokemon = null;
+    $id = null;
+
+    if (isset($_GET['id']) && is_numeric($_GET['id'])) {
+        $id = $_GET['id'];
+        $pokemon = $pokedex->buscarPokemonPorId($id);
+    }
+    ?>
+
     <div id="mensaje" class="mensaje" style="display: none;"></div>
     <form action="agregar.php" method="POST" enctype="multipart/form-data" class="form-add">
+        <?php if (isset($pokemon)): ?>
+            <input type="hidden" name="id" value="<?php echo $id; ?>">
+        <?php endif; ?>
+
         <div class="form-group-doble">
             <div class="form-group-add-nombre">
                 <label for="nombre">Nombre del Pokémon:</label>
-                <input type="text" name="nombre" id="nombre" required value="<?php echo isset($pokemon) ? htmlspecialchars($pokemon['nombre']) : ''; ?>">
+                <input type="text" name="nombre" id="nombre" required
+                       value="<?php echo isset($pokemon) ? htmlspecialchars($pokemon['nombre']) : ''; ?>">
             </div>
 
             <div class="form-group-add">
                 <label for="numero">Número del Pokémon:</label>
-                <input type="number" name="numero" id="numero" required value="<?php echo isset($pokemon) ? htmlspecialchars($pokemon['numero']) : ''; ?>">
+                <input type="number" name="numero" id="numero" required
+                       value="<?php echo isset($pokemon) ? htmlspecialchars($pokemon['numero']) : ''; ?>">
             </div>
         </div>
         <div class="form-group-add">
             <label for="descripcion">Descripción del Pokémon:</label>
-            <textarea name="descripcion" id="descripcion" required><?php echo isset($pokemon) ? htmlspecialchars($pokemon['descripcion']) : ''; ?></textarea>
+            <textarea name="descripcion" id="descripcion"
+                      required><?php echo isset($pokemon) ? htmlspecialchars($pokemon['descripcion']) : ''; ?></textarea>
         </div>
 
         <div class="form-group-add">
             <label for="imagen">Imagen del Pokémon:</label>
-            <input type="file" name="imagen" id="imagen" accept="image/*" <?php echo !isset($pokemon) ? 'required' : ''; ?>>
+            <div class="form-group-img">
+                <?php if (isset($pokemon) && !empty($pokemon['imagen'])): ?>
+                    <div class="imagen-actual">
+                        <img src="/PW2-Pokedex/img/pokemon/<?php echo htmlspecialchars($pokemon['imagen']); ?>"
+                              alt="<?php echo htmlspecialchars($pokemon['nombre']); ?>"
+                              style="max-width: 150px; max-height: 150px;">
+                    </div>
+                <?php endif; ?>
+                <input type="file" name="imagen" id="imagen" class="input-img" accept="image/*" required>
+            </div>
         </div>
 
         <div class="form-group-add">
             <label>Selecciona los tipos del Pokémon:</label>
-
             <div class="pokemon-types">
                 <?php
                 $dir = 'img/TipoPokemon/';
                 $imagenes = scandir($dir);
 
-                foreach ($imagenes as $imagen) {
-                    if ($imagen !== '.' && $imagen !== '..' && preg_match('/\.(png)$/', $imagen) && strpos($imagen, '_icono') === false) {
-                        $nombreTipo = str_replace('tipo_', '', pathinfo($imagen, PATHINFO_FILENAME));  // Eliminar 'tipo_' del nombre
+                $tiposSeleccionados = isset($pokemon) ? $pokedex->obtenerTiposPorPokemonId($id) : [];
+                $tiposSeleccionadosNombres = array_column($tiposSeleccionados, 'nombre');
 
-                        echo '<label class="tipo-label" data-tipo="' . $nombreTipo . '">';
+                foreach ($imagenes as $imagen) {
+                    if ($imagen !== '.' && $imagen !== '..' && preg_match('/\.(png)$/', $imagen)  && strpos($imagen, '_icono') === false) {
+                        $nombreTipo = str_replace('tipo_', '', pathinfo($imagen, PATHINFO_FILENAME));
+
+                        $tipoSeleccionado = in_array(ucfirst($nombreTipo), $tiposSeleccionadosNombres) ? 'selected' : '';
+
+                        echo '<label class="tipo-label ' . $tipoSeleccionado . '" data-tipo="' . ucfirst($nombreTipo) . '">';
                         echo '<img src="' . $dir . $imagen . '" alt="' . ucfirst($nombreTipo) . '" class="tipo-img" />';
                         echo '</label>';
                     }
                 }
                 ?>
-                <input type="hidden" id="tipos_seleccionados" name="tipos" value="<?php echo isset($pokemon) ? htmlspecialchars(implode(',', $pokemon['tipos'])) : ''; ?>">
+
+                <input type="hidden" id="tipos_seleccionados" name="tipos"
+                       value="<?php echo isset($pokemon) ? htmlspecialchars(implode(',', $tiposSeleccionadosNombres)) : ''; ?>">
             </div>
         </div>
 
-        <button type="submit" class="add-pokemon-btn"><?php echo isset($pokemon) ? 'Guardar Cambios' : 'Agregar Pokémon'; ?></button>
 
         <?php
-        require_once 'Pokedex.php';
+        require_once 'pokedex.php';
 
         $pokedex = new Pokedex();
         $mensaje = '';
 
-        if (isset($_GET['id']) && is_numeric($_GET['id'])) {
-            $id = $_GET['id'];
-            $pokemon = $pokedex->buscarPokemonPorId($id); // Asumiendo que tienes un método para buscar por ID
-        }
-
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-            if (isset($_POST['nombre'], $_POST['numero'], $_POST['descripcion']) && isset($_FILES['imagen']) && !empty($_POST['tipos'])) {
+            if (isset($_POST['nombre'], $_POST['numero'], $_POST['descripcion']) && !empty($_POST['tipos'])) {
                 $nombre = $_POST['nombre'];
                 $numero = $_POST['numero'];
                 $descripcion = $_POST['descripcion'];
-                $tipos = explode(',', $_POST['tipos']);
+                $tipos = $_POST['tipos'];
                 $imagen = $_FILES['imagen'];
 
-                if (isset($_GET['id'])) {
-                    $resultado = $pokedex->editarPokemon($id, $nombre, $numero, $descripcion, $imagen, $tipos); // Método para editar Pokémon
+                if (isset($_POST['id']) && is_numeric($_POST['id'])) {
+                    $id = $_POST['id'];
+                    $resultado = $pokedex->editarPokemon($id, $nombre, $numero, $descripcion, $imagen, $tipos);
                 } else {
                     $resultado = $pokedex->agregarPokemon($nombre, $numero, $descripcion, $imagen, $tipos);
                 }
 
                 $mensaje = $resultado;
                 $tipo_mensaje = (strpos($resultado, 'correctamente') !== false) ? 'exito' : 'error';
+
             } else {
                 $mensaje = "Por favor, complete todos los campos.";
                 $tipo_mensaje = 'error';
             }
         }
         ?>
+        <button type="submit"
+                class="add-pokemon-btn"><?php echo isset($pokemon) ? 'Guardar Cambios' : 'Agregar Pokémon'; ?></button>
+
 
     </form>
 
