@@ -79,7 +79,6 @@ class Pokedex
                 }
 
                 echo '</div>';
-                echo '</div>';
 
             }
         } else {
