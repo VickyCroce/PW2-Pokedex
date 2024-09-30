@@ -2,9 +2,38 @@
     background-color: #E3350D;
     padding: 20px;
     text-align: center;
+    position: relative;
 }
 
 .header img {
     max-width: 200px;
     height: auto;
+}
+
+.user-actions {
+    position: absolute;
+    top: 50%;
+    right: 20px;
+    transform: translateY(-50%);
+    display: flex;
+    align-items: center;
+}
+
+.user-actions p {
+    margin-right: 15px;
+    font-size: 16px;
+    color: white;
+}
+
+.user-actions a {
+    text-decoration: none;
+    background-color: #ff6347;
+    color: white;
+    padding: 8px 16px;
+    border-radius: 5px;
+    font-size: 14px;
+}
+
+.user-actions a:hover {
+    background-color: #f3de75;
 }

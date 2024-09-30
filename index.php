@@ -1,5 +1,5 @@
 <?php
-
+session_start();
 require_once 'pokedex.php';
 
 $pokedex = new Pokedex();
@@ -17,7 +17,7 @@ $filtro = isset($_GET['filtro']) ? $_GET['filtro'] : "";
     <title>Pokedex</title>
     <link rel="stylesheet" href="estilos/style.css">
     <link rel="icon" href="img/pokebolaLogo.png" type="image/png">
-    <link rel="stylesheet" href="popup.css">
+    <link rel="stylesheet" href="estilos/popup.css">
 </head>
 <body>
 

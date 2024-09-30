@@ -57,12 +57,15 @@ class Pokedex
         if ($result2->num_rows > 0) {
             while ($row = $result2->fetch_assoc()) {
                 echo '<div class="pokemon-item">';
-
                 echo '<div class="pokemon-actions">';
 
-                echo '<a href="agregar.php?id=' . $row["id"] . '" class="action-btn"><img src="img/editar.png" alt="Editar" title="Editar" class="action-icon"></a>';
-                echo '<a href="#" class="action-btn" onclick="confirmarEliminacion(' . $row["id"] . ')"><img src="img/eliminar.png" alt="Borrar" title="Borrar" class="action-icon"></a>';
-                echo '</div>';
+
+                if (isset($_SESSION['username'])) {
+                    echo '<div class="pokemon-actions">';
+                    echo '<a href="agregar.php?id=' . $row["id"] . '" class="action-btn"><img src="img/editar.png" alt="Editar" title="Editar" class="action-icon"></a>';
+                    echo '<a href="#" class="action-btn" onclick="confirmarEliminacion(' . $row["id"] . ')"><img src="img/eliminar.png" alt="Borrar" title="Borrar" class="action-icon"></a>';
+                    echo '</div>';
+                }
 
                 echo '<img src="img/pokemon/' . $row["imagen"] . '" alt="' . $row["nombre"] . '" class="pokemon-img">';
                 echo '<a href="Detalles.php?id=' . $row["id"] . '" class="pokemon-name">' . $row["nombre"] . '</a>';
