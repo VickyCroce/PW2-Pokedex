@@ -17,7 +17,7 @@
 
 
     <?php
-    require_once 'Pokedex.php';
+    require_once 'pokedex.php';
     $pokedex = new Pokedex();
 
     $pokemon = null;
