@@ -113,7 +113,7 @@ class Pokedex
         $rutaImagen = 'img/pokemon/' . $nombreImagen;
 
         if (!move_uploaded_file($imagen['tmp_name'], $rutaImagen)) {
-            return "Error al subir la imagen.";
+            return "La imagen es obligatoria.";
         }
 
         $sql = "INSERT INTO pokemon (nombre, numero, descripcion, imagen) VALUES ('$nombre', '$numero', '$descripcion', '$nombreImagen')";

@@ -10,8 +10,11 @@
 
 <?php require_once 'header.php'; ?>
 
+<a href="index.php" class="back-arrow">&#8592; Volver</a>
+
 <div class="container-add">
     <h1><?php echo isset($_GET['id']) ? 'Editar Pokémon' : 'Agregar Pokémon'; ?></h1>
+
 
     <?php
     require_once 'Pokedex.php';
@@ -61,7 +64,7 @@
                               style="max-width: 150px; max-height: 150px;">
                     </div>
                 <?php endif; ?>
-                <input type="file" name="imagen" id="imagen" class="input-img" accept="image/*">
+                <input type="file" name="imagen" id="imagen" class="input-img" accept="image/*" required>
             </div>
         </div>
 
@@ -110,13 +113,14 @@
 
                 if (isset($_POST['id']) && is_numeric($_POST['id'])) {
                     $id = $_POST['id'];
-                    $resultado = $pokedex->editarPokemon($id, $nombre, $numero, $descripcion, $imagen, $tipos); // Método para editar Pokémon
+                    $resultado = $pokedex->editarPokemon($id, $nombre, $numero, $descripcion, $imagen, $tipos);
                 } else {
                     $resultado = $pokedex->agregarPokemon($nombre, $numero, $descripcion, $imagen, $tipos);
                 }
 
                 $mensaje = $resultado;
                 $tipo_mensaje = (strpos($resultado, 'correctamente') !== false) ? 'exito' : 'error';
+
             } else {
                 $mensaje = "Por favor, complete todos los campos.";
                 $tipo_mensaje = 'error';

@@ -9,7 +9,8 @@
 <body>
 
 <div class="header">
-    <img src="img/pokedexLogo.png" alt="Pokedex Logo">
+    <a href="index.php"><img src="img/pokedexLogo.png" alt="Pokedex Logo"></a>
+
 </div>
 </body>
 </html>

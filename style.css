@@ -135,26 +135,48 @@ body {
 
 /* Botón de agregar Pokémon */
 .add-pokemon {
+    position: fixed; /* Fijo en relación al viewport */
+    bottom: 20px; /* Distancia desde el fondo */
+    right: 20px; /* Distancia desde la derecha */
+    z-index: 1000; /* Asegúrate de que se muestre encima de otros elementos */
     grid-column: 1 / -1; /* Ocupa toda la fila */
-    text-align: center;
-    margin-top: 20px;
+    text-align: center; /* Centrar contenido */
+    margin-top: 20px; /* Espacio superior */
 }
 
 .add-pokemon-btn {
-    display: inline-block;
-    padding: 10px 20px;
-    background-color: #f8e042;
-    color: white;
-    border: none;
-    border-radius: 40px;
-    text-decoration: none;
-    font-weight: bold;
-    font-size: 16px;
-    cursor: pointer;
+    display: inline-block; /* Para que se comporte como un botón */
+    padding: 10px 20px; /* Espaciado interno */
+    background-color: #f8e042; /* Color de fondo */
+    color: white; /* Color del texto */
+    border: none; /* Sin borde */
+    border-radius: 40px; /* Bordes redondeados */
+    text-decoration: none; /* Sin subrayado */
+    font-weight: bold; /* Texto en negrita */
+    font-size: 16px; /* Tamaño de la fuente */
+    cursor: pointer; /* Cambiar el cursor a puntero */
 }
 
 .add-pokemon-btn:hover {
-    background-color: #E3350D;
+    background-color: #E3350D; /* Color de fondo al pasar el ratón */
+}
+
+.back-arrow {
+    position: fixed; /* Fijo en relación al viewport */
+    top: 20px; /* Distancia desde la parte superior */
+    left: 20px; /* Distancia desde la izquierda */
+    background-color: #f8e042; /* Color de fondo */
+    color: white; /* Color del texto */
+    padding: 10px; /* Espaciado interno */
+    border-radius: 5px; /* Bordes redondeados */
+    text-decoration: none; /* Sin subrayado */
+    font-weight: bold; /* Texto en negrita */
+    font-size: 16px; /* Tamaño de la fuente */
+    z-index: 1000; /* Asegúrate de que se muestre encima de otros elementos */
+}
+
+.back-arrow:hover {
+    background-color: #E3350D; /* Color de fondo al pasar el ratón */
 }
 
 /* VISTA AGREGAR POKEMON */
