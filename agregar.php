@@ -64,7 +64,7 @@
                               style="max-width: 150px; max-height: 150px;">
                     </div>
                 <?php endif; ?>
-                <input type="file" name="imagen" id="imagen" class="input-img" accept="image/*" required>
+                <input type="file" name="imagen" id="imagen" class="input-img" accept="image/*">
             </div>
         </div>
 
