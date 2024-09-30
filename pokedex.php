@@ -59,14 +59,11 @@ class Pokedex
                 echo '<div class="pokemon-item">';
 
                 // Botones de editar y borrar
-                // Muestra los botones solo cuando el usuario esta logueado
+                echo '<div class="pokemon-actions">';
 
-                if (isset($_SESSION['username'])) {
-                    echo '<div class="pokemon-actions">';
-                    echo '<a href="agregar.php?id=' . $row["id"] . '" class="action-btn"><img src="img/editar.png" alt="Editar" title="Editar" class="action-icon"></a>';
-                    echo '<a href="#" class="action-btn" onclick="confirmarEliminacion(' . $row["id"] . ')"><img src="img/eliminar.png" alt="Borrar" title="Borrar" class="action-icon"></a>';
-                    echo '</div>';
-                }
+                echo '<a href="agregar.php?id=' . $row["id"] . '" class="action-btn"><img src="img/editar.png" alt="Editar" title="Editar" class="action-icon"></a>';
+                echo '<a href="#" class="action-btn" onclick="confirmarEliminacion(' . $row["id"] . ')"><img src="img/eliminar.png" alt="Borrar" title="Borrar" class="action-icon"></a>';
+                echo '</div>';
 
                 echo '<img src="img/pokemon/' . $row["imagen"] . '" alt="' . $row["nombre"] . '" class="pokemon-img">';
                 echo '<a href="Detalles.php?id=' . $row["id"] . '" class="pokemon-name">' . $row["nombre"] . '</a>';
