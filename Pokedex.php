@@ -66,6 +66,7 @@ class Pokedex
                     echo '<a href="#" class="action-btn" onclick="confirmarEliminacion(' . $row["id"] . ')"><img src="img/eliminar.png" alt="Borrar" title="Borrar" class="action-icon"></a>';
                     echo '</div>';
                 }
+                echo '</div>';
 
                 echo '<img src="img/pokemon/' . $row["imagen"] . '" alt="' . $row["nombre"] . '" class="pokemon-img">';
                 echo '<a href="Detalles.php?id=' . $row["id"] . '" class="pokemon-name">' . $row["nombre"] . '</a>';
