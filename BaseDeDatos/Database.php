@@ -23,6 +23,10 @@ class Database{
         return $this->conexion->real_escape_string($string);
     }
 
+    public function prepare($sql)
+    {
+        return $this->conexion->prepare($sql);
+    }
     public function __destruct(){
         $this->conexion->close();
     }
