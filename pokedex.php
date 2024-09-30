@@ -1,14 +1,17 @@
 <?php
 require_once 'BaseDeDatos/Database.php';
 
-class Pokedex {
+class Pokedex
+{
     private $conexion;
 
-    public function __construct() {
+    public function __construct()
+    {
         $this->conexion = new database();
     }
 
-    public function buscarPokemon($buscador, $filtro) {
+    public function buscarPokemon($buscador, $filtro)
+    {
         $order_by = "numero ASC";
 
         if (isset($filtro)) {
@@ -47,26 +50,25 @@ class Pokedex {
     }
 
     //Métodopara mostrar la lista de Pokémon
-    public function mostrarListaPokemon($buscador, $filtro) {
+    public function mostrarListaPokemon($buscador, $filtro)
+    {
         $result2 = $this->buscarPokemon($buscador, $filtro);
 
         if ($result2->num_rows > 0) {
-            while($row = $result2->fetch_assoc()) {
+            while ($row = $result2->fetch_assoc()) {
                 echo '<div class="pokemon-item">';
 
-                // Botones de editar y borrar
                 echo '<div class="pokemon-actions">';
 
                 echo '<a href="agregar.php?id=' . $row["id"] . '" class="action-btn"><img src="img/editar.png" alt="Editar" title="Editar" class="action-icon"></a>';
                 echo '<a href="#" class="action-btn" onclick="confirmarEliminacion(' . $row["id"] . ')"><img src="img/eliminar.png" alt="Borrar" title="Borrar" class="action-icon"></a>';
                 echo '</div>';
-                
+
                 echo '<img src="img/pokemon/' . $row["imagen"] . '" alt="' . $row["nombre"] . '" class="pokemon-img">';
-                echo '<a href="Detalles.php?id=' . $row["id"] . '" class="pokemon-name">'. $row["nombre"] . '</a>';
+                echo '<a href="Detalles.php?id=' . $row["id"] . '" class="pokemon-name">' . $row["nombre"] . '</a>';
 
                 echo '<p class="pokemon-number">Número: ' . $row["numero"] . '</p>';
 
-                // Mostrar tipos de Pokémon
                 $tipos = explode(',', $row["tipos"]);
                 foreach ($tipos as $tipo) {
                     echo '<img src="img/TipoPokemon/tipo_' . strtolower($tipo) . '.png" class="pokemon-type">';
@@ -79,7 +81,34 @@ class Pokedex {
         }
     }
 
-    public function agregarPokemon($nombre, $numero, $descripcion, $imagen, $tipos) {
+    public function obtenerIdTipo($nombreTipo) {
+        $sql = "SELECT id FROM tipo WHERE nombre_p = ?";
+        $stmt = $this->conexion->prepare($sql);
+        $stmt->bind_param('s', $nombreTipo);
+        $stmt->execute();
+        $resultado = $stmt->get_result();
+        if ($resultado->num_rows > 0) {
+            $row = $resultado->fetch_assoc();
+            return $row['id'];
+        } else {
+            return null;
+        }
+    }
+
+    public function obtenerTipos() {
+        $query = "SELECT id, nombre, imagen FROM tipo";
+        $result = $this->conexion->query($query);
+
+        $tipos = [];
+        while ($row = $result->fetch_assoc()) {
+            $tipos[] = $row;
+        }
+
+        return $tipos;
+    }
+
+    public function agregarPokemon($nombre, $numero, $descripcion, $imagen, $tipos)
+    {
         $nombreImagen = basename($imagen['name']);
         $rutaImagen = 'img/pokemon/' . $nombreImagen;
 
@@ -92,7 +121,13 @@ class Pokedex {
         if ($this->conexion->query($sql)) {
             $pokemon_id = $this->conexion->conexion->insert_id;
 
+            if (!is_array($tipos)) {
+                $tipos = explode(',', $tipos);
+            }
+
             foreach ($tipos as $tipo) {
+                $tipo = trim($tipo);
+
                 $sql_tipo = "SELECT id FROM tipo WHERE nombre_p = '$tipo'";
                 $resultado_tipo = $this->conexion->query($sql_tipo);
 
@@ -104,25 +139,134 @@ class Pokedex {
                     $this->conexion->query($sql_relacion);
                 }
             }
-
             return "Pokémon agregado correctamente";
         } else {
             return "Error al insertar en la base de datos.";
         }
     }
 
-    public function buscarPokemonPorId($id) {
-        $sql = "SELECT * FROM pokemon WHERE id = '$id'";
-        $result = $this->conexion->query($sql);
-        return $result->fetch_assoc();
+
+    public function obtenerTiposPorPokemonId($id)
+    {
+        $sqlTipos = "SELECT tipo.id FROM pokemon_tipo 
+                 JOIN tipo ON pokemon_tipo.tipo_id = tipo.id 
+                 WHERE pokemon_tipo.pokemon_id = ?";
+        $stmtTipos = $this->conexion->prepare($sqlTipos);
+        $stmtTipos->bind_param("i", $id);
+        $stmtTipos->execute();
+        $resultTipos = $stmtTipos->get_result();
+
+        $tipos = [];
+        while ($row = $resultTipos->fetch_assoc()) {
+            $tipos[] = $row['id'];
+        }
+
+        return $tipos;
     }
 
-    public function editarPokemon($id, $nombre, $numero, $descripcion, $imagen, $tipos) {
-        // Lógica similar a agregar, pero usando UPDATE en lugar de INSERT
-        // No olvides manejar la imagen según sea necesario
+    function buscarPokemonPorId($id) {
+        $sql = "SELECT * FROM pokemon WHERE id = ?";
+        $stmt = $this->conexion->prepare($sql);
+        $stmt->bind_param("i", $id);
+        $stmt->execute();
+        $resultado = $stmt->get_result();
+        $pokemon = $resultado->fetch_assoc();
+
+        $pokemon['tipos'] = $this->obtenerTiposPorPokemonId($id);
+
+        return $pokemon;
     }
 
-    public function eliminarPokemon($id) {
+    public function editarPokemon($id, $nombre, $numero, $descripcion, $imagen, $tipos)
+    {
+        $pokemonActual = $this->buscarPokemonPorId($id);
+
+        $sql = "UPDATE pokemon SET ";
+        $params = [];
+        $types = '';
+        $updates = [];
+        if ($nombre !== $pokemonActual['nombre']) {
+            $updates[] = "nombre = ?";
+            $params[] = $nombre;
+            $types .= 's';
+        }
+
+        if ($numero !== $pokemonActual['numero']) {
+            $updates[] = "numero = ?";
+            $params[] = $numero;
+            $types .= 's';
+        }
+
+        if ($descripcion !== $pokemonActual['descripcion']) {
+            $updates[] = "descripcion = ?";
+            $params[] = $descripcion;
+            $types .= 's';
+        }
+
+        if ($imagen['error'] !== UPLOAD_ERR_NO_FILE) {
+            $imagenActual = $imagen['name'];
+            $updates[] = "imagen = ?";
+            $params[] = $imagenActual;
+            $types .= 's';
+        }
+
+//    posible solucion tipos:
+//        public function editarPokemon($id, $nombre, $numero, $descripcion, $imagen, $tipos)
+//    {
+//        $pokemonActual = $this->buscarPokemonPorId($id);
+//
+//        // Código para actualizar los datos del Pokémon...
+//
+//        // Primero eliminamos las entradas actuales de los tipos
+//        $sql_eliminar_tipos = "DELETE FROM pokemon_tipo WHERE pokemon_id = ?";
+//        $stmt_eliminar = $this->conexion->prepare($sql_eliminar_tipos);
+//        $stmt_eliminar->bind_param('i', $id);
+//        $stmt_eliminar->execute();
+//
+//        // Luego, insertamos los nuevos tipos
+//        foreach ($tipos as $tipo) {
+//            $sql_tipo = "SELECT id FROM tipo WHERE nombre_p = ?";
+//            $stmt_tipo = $this->conexion->prepare($sql_tipo);
+//            $stmt_tipo->bind_param('s', $tipo);
+//            $stmt_tipo->execute();
+//            $resultado_tipo = $stmt_tipo->get_result();
+//
+//            if ($resultado_tipo->num_rows > 0) {
+//                $row = $resultado_tipo->fetch_assoc();
+//                $tipo_id = $row['id'];
+//
+//                $sql_relacion = "INSERT INTO pokemon_tipo (pokemon_id, tipo_id) VALUES (?, ?)";
+//                $stmt_relacion = $this->conexion->prepare($sql_relacion);
+//                $stmt_relacion->bind_param('ii', $id, $tipo_id);
+//                $stmt_relacion->execute();
+//            }
+//        }
+//
+//        return "Pokémon editado correctamente.";
+//    }
+
+        if (count($updates) > 0) {
+            $sql .= implode(", ", $updates);
+            $sql .= " WHERE id = ?";
+            $params[] = $id;
+            $types .= 'i';
+
+            $stmt = $this->conexion->prepare($sql);
+            $stmt->bind_param($types, ...$params);
+
+            if ($stmt->execute()) {
+                return "Pokémon editado correctamente.";
+            } else {
+                return "Error al editar el Pokémon: " . $stmt->error;
+            }
+        } else {
+            return "No se han realizado cambios en el Pokémon.";
+        }
+    }
+
+
+    public function eliminarPokemon($id)
+    {
         $sql_eliminar_relaciones = "DELETE FROM pokemon_tipo WHERE pokemon_id = '$id'";
         if ($this->conexion->query($sql_eliminar_relaciones)) {
 
@@ -137,52 +281,3 @@ class Pokedex {
         }
     }
 }
-
-    public function agregarPokemon($nombre, $numero, $descripcion, $imagen, $tipos) {
-        $nombreImagen = basename($imagen['name']);
-        $rutaImagen = 'img/pokemon/' . $nombreImagen;
-
-        if (!move_uploaded_file($imagen['tmp_name'], $rutaImagen)) {
-            return "Error al subir la imagen.";
-        }
-
-        $sql = "INSERT INTO pokemon (nombre, numero, descripcion, imagen) VALUES ('$nombre', '$numero', '$descripcion', '$nombreImagen')";
-
-        if ($this->conexion->query($sql)) {
-            $pokemon_id = $this->conexion->conexion->insert_id;
-
-            foreach ($tipos as $tipo) {
-                $sql_tipo = "SELECT id FROM tipo WHERE nombre_p = '$tipo'";
-                $resultado_tipo = $this->conexion->query($sql_tipo);
-
-                if ($resultado_tipo->num_rows > 0) {
-                    $row = $resultado_tipo->fetch_assoc();
-                    $tipo_id = $row['id'];
-
-                    $sql_relacion = "INSERT INTO pokemon_tipo (pokemon_id, tipo_id) VALUES ('$pokemon_id', '$tipo_id')";
-                    $this->conexion->query($sql_relacion);
-                }
-            }
-
-            return "Pokémon agregado correctamente";
-        } else {
-            return "Error al insertar en la base de datos.";
-        }
-    }
-
-    public function eliminarPokemon($numero) {
-        $sql_eliminar_relaciones = "DELETE FROM pokemon_tipo WHERE pokemon_id = (SELECT id FROM pokemon WHERE numero = '$numero')";
-        if ($this->conexion->query($sql_eliminar_relaciones)) {
-
-            $sql_eliminar_pokemon = "DELETE FROM pokemon WHERE numero = '$numero'";
-            if ($this->conexion->query($sql_eliminar_pokemon)) {
-                return "Pokémon eliminado correctamente.";
-            } else {
-                return "Error al eliminar el Pokémon.";
-            }
-        } else {
-            return "Error al eliminar las relaciones del Pokémon.";
-        }
-    }
-}
-?>

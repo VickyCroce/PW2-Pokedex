@@ -187,7 +187,7 @@ body {
 
 .form-group-add-nombre {
     margin-right: 2rem;
-    width: -webkit-fill-available;
+    /*width: -webkit-fill-available;*/
 }
 
 .form-group-doble {
@@ -290,6 +290,16 @@ select {
     opacity: 0.8;
 }
 
+.form-group-img {
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+}
+
+.input-img{
+    width: 18rem;
+}
+
 /* Responsividad */
 @media (max-width: 768px) {
     .container-add {
@@ -316,7 +326,7 @@ select {
     textarea,
     select {
         font-size: 14px;
-        width: -webkit-fill-available;
+        /*width: -webkit-fill-available;*/
     }
 
     button[type="submit"] {
