@@ -1,0 +1,75 @@
+/* Estilo para el fondo del popup */
+.popup {
+    display: none; /* Oculto por defecto */
+    position: fixed; /* Posiciona el popup de forma fija en la pantalla */
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* Fondo semi-transparente */
+    z-index: 1000; /* Asegura que esté por encima de otros elementos */
+}
+
+/* Contenido del popup */
+.popup-content {
+    position: absolute;
+    top: 50%; /* Centrar verticalmente */
+    left: 50%; /* Centrar horizontalmente */
+    transform: translate(-50%, -50%); /* Ajustar para centrar completamente */
+    background-color: white; /* Fondo blanco para el contenido */
+    padding: 20px; /* Espaciado interno */
+    border-radius: 10px; /* Bordes redondeados */
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3); /* Sombra para dar profundidad */
+    width: 300px; /* Ancho fijo del popup */
+    animation: fadeIn 0.3s ease; /* Animación de aparición */
+}
+
+/* Animación de entrada */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translate(-50%, -60%); /* Moverse hacia arriba para un efecto de flotación */
+    }
+    to {
+        opacity: 1;
+        transform: translate(-50%, -50%); /* Posición final centrada */
+    }
+}
+
+.popup-section{
+    display: flex;
+    justify-content: flex-end;
+}
+
+/* Estilo de los botones */
+.btn-confirmar {
+    background-color: #ff0000; /* Color de fondo del botón */
+    color: white; /* Color del texto */
+    border: none; /* Sin borde */
+    padding: 10px 20px; /* Espaciado interno */
+    margin: 5px; /* Espaciado externo */
+    border-radius: 5px; /* Bordes redondeados */
+    cursor: pointer; /* Cambiar cursor al pasar por encima */
+    transition: background-color 0.3s; /* Transición suave al cambiar de color */
+    font-size: 16px; /* Tamaño de fuente */
+}
+
+.btn-confirmar:hover {
+    background-color: #8B0000; /* Color al pasar el ratón por encima */
+}
+
+.btn-cancelar {
+    background-color: #9b9b9b; /* Color de fondo del botón */
+    color: white; /* Color del texto */
+    border: none; /* Sin borde */
+    padding: 10px 20px; /* Espaciado interno */
+    margin: 5px; /* Espaciado externo */
+    border-radius: 5px; /* Bordes redondeados */
+    cursor: pointer; /* Cambiar cursor al pasar por encima */
+    transition: background-color 0.3s; /* Transición suave al cambiar de color */
+    font-size: 16px; /* Tamaño de fuente */
+}
+
+.btn-cancelar:hover {
+    background-color: #c6c6c6; /* Color al pasar el ratón por encima */
+}

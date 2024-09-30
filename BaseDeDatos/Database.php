@@ -1,6 +1,6 @@
 <?php
 class Database{
-    private $conexion;
+    public $conexion;
 
     public function __construct($host = "localhost",
                                 $user = "root",
