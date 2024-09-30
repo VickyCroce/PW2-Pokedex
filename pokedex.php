@@ -148,17 +148,25 @@ class Pokedex
 
     public function obtenerTiposPorPokemonId($id)
     {
-        $sqlTipos = "SELECT tipo.id FROM pokemon_tipo 
+        $sqlTipos = "SELECT tipo.id, tipo.nombre_p FROM pokemon_tipo 
                  JOIN tipo ON pokemon_tipo.tipo_id = tipo.id 
                  WHERE pokemon_tipo.pokemon_id = ?";
+
         $stmtTipos = $this->conexion->prepare($sqlTipos);
+
         $stmtTipos->bind_param("i", $id);
+
         $stmtTipos->execute();
+
         $resultTipos = $stmtTipos->get_result();
 
         $tipos = [];
+
         while ($row = $resultTipos->fetch_assoc()) {
-            $tipos[] = $row['id'];
+            $tipos[] = [
+                'id' => $row['id'],
+                'nombre' => $row['nombre_p']
+            ];
         }
 
         return $tipos;
@@ -210,40 +218,34 @@ class Pokedex
             $types .= 's';
         }
 
-//    posible solucion tipos:
-//        public function editarPokemon($id, $nombre, $numero, $descripcion, $imagen, $tipos)
-//    {
-//        $pokemonActual = $this->buscarPokemonPorId($id);
-//
-//        // Código para actualizar los datos del Pokémon...
-//
-//        // Primero eliminamos las entradas actuales de los tipos
-//        $sql_eliminar_tipos = "DELETE FROM pokemon_tipo WHERE pokemon_id = ?";
-//        $stmt_eliminar = $this->conexion->prepare($sql_eliminar_tipos);
-//        $stmt_eliminar->bind_param('i', $id);
-//        $stmt_eliminar->execute();
-//
-//        // Luego, insertamos los nuevos tipos
-//        foreach ($tipos as $tipo) {
-//            $sql_tipo = "SELECT id FROM tipo WHERE nombre_p = ?";
-//            $stmt_tipo = $this->conexion->prepare($sql_tipo);
-//            $stmt_tipo->bind_param('s', $tipo);
-//            $stmt_tipo->execute();
-//            $resultado_tipo = $stmt_tipo->get_result();
-//
-//            if ($resultado_tipo->num_rows > 0) {
-//                $row = $resultado_tipo->fetch_assoc();
-//                $tipo_id = $row['id'];
-//
-//                $sql_relacion = "INSERT INTO pokemon_tipo (pokemon_id, tipo_id) VALUES (?, ?)";
-//                $stmt_relacion = $this->conexion->prepare($sql_relacion);
-//                $stmt_relacion->bind_param('ii', $id, $tipo_id);
-//                $stmt_relacion->execute();
-//            }
-//        }
-//
-//        return "Pokémon editado correctamente.";
-//    }
+
+        $sql_eliminar_tipos = "DELETE FROM pokemon_tipo WHERE pokemon_id = ?";
+        $stmt_eliminar = $this->conexion->prepare($sql_eliminar_tipos);
+        $stmt_eliminar->bind_param('i', $id);
+        $stmt_eliminar->execute();
+
+        if (is_string($tipos)) {
+            $tipos = explode(',', $tipos);
+        }
+
+        foreach ($tipos as $tipo) {
+            $sql_tipo = "SELECT id FROM tipo WHERE nombre_p = ?";
+            $stmt_tipo = $this->conexion->prepare($sql_tipo);
+            $stmt_tipo->bind_param('s', $tipo);
+            $stmt_tipo->execute();
+            $resultado_tipo = $stmt_tipo->get_result();
+
+            if ($resultado_tipo->num_rows > 0) {
+                $row = $resultado_tipo->fetch_assoc();
+                $tipo_id = $row['id'];
+
+                $sql_relacion = "INSERT INTO pokemon_tipo (pokemon_id, tipo_id) VALUES (?, ?)";
+                $stmt_relacion = $this->conexion->prepare($sql_relacion);
+                $stmt_relacion->bind_param('ii', $id, $tipo_id);
+                $stmt_relacion->execute();
+            }
+        }
+
 
         if (count($updates) > 0) {
             $sql .= implode(", ", $updates);

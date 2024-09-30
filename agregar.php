@@ -56,9 +56,9 @@
             <div class="form-group-img">
                 <?php if (isset($pokemon) && !empty($pokemon['imagen'])): ?>
                     <div class="imagen-actual">
-                        <img src="/PW2-TP-Pokedex/img/pokemon/<?php echo htmlspecialchars($pokemon['imagen']); ?>"
-                             alt="<?php echo htmlspecialchars($pokemon['nombre']); ?>"
-                             style="max-width: 150px; max-height: 150px;">
+                        <img src="/PW2-Pokedex/img/pokemon/<?php echo htmlspecialchars($pokemon['imagen']); ?>"
+                              alt="<?php echo htmlspecialchars($pokemon['nombre']); ?>"
+                              style="max-width: 150px; max-height: 150px;">
                     </div>
                 <?php endif; ?>
                 <input type="file" name="imagen" id="imagen" class="input-img" accept="image/*">
@@ -72,19 +72,27 @@
                 $dir = 'img/TipoPokemon/';
                 $imagenes = scandir($dir);
 
-                foreach ($imagenes as $imagen) {
-                    if ($imagen !== '.' && $imagen !== '..' && preg_match('/\.(png)$/', $imagen) && strpos($imagen, '_icono') === false) {
-                        $nombreTipo = str_replace('tipo_', '', pathinfo($imagen, PATHINFO_FILENAME));  // Eliminar 'tipo_' del nombre
+                $tiposSeleccionados = isset($pokemon) ? $pokedex->obtenerTiposPorPokemonId($id) : [];
+                $tiposSeleccionadosNombres = array_column($tiposSeleccionados, 'nombre');
 
-                        echo '<label class="tipo-label" data-tipo="' . $nombreTipo . '">';
+                foreach ($imagenes as $imagen) {
+                    if ($imagen !== '.' && $imagen !== '..' && preg_match('/\.(png)$/', $imagen)  && strpos($imagen, '_icono') === false) {
+                        $nombreTipo = str_replace('tipo_', '', pathinfo($imagen, PATHINFO_FILENAME));
+
+                        $tipoSeleccionado = in_array(ucfirst($nombreTipo), $tiposSeleccionadosNombres) ? 'selected' : '';
+
+                        echo '<label class="tipo-label ' . $tipoSeleccionado . '" data-tipo="' . ucfirst($nombreTipo) . '">';
                         echo '<img src="' . $dir . $imagen . '" alt="' . ucfirst($nombreTipo) . '" class="tipo-img" />';
                         echo '</label>';
                     }
                 }
                 ?>
-                <input type="hidden" id="tipos_seleccionados" name="tipos" value="<?php echo isset($pokemon) ? htmlspecialchars(implode(',', $pokemon['tipos'])) : ''; ?>">
+
+                <input type="hidden" id="tipos_seleccionados" name="tipos"
+                       value="<?php echo isset($pokemon) ? htmlspecialchars(implode(',', $tiposSeleccionadosNombres)) : ''; ?>">
             </div>
         </div>
+
 
         <?php
         require_once 'pokedex.php';
@@ -102,10 +110,8 @@
 
                 if (isset($_POST['id']) && is_numeric($_POST['id'])) {
                     $id = $_POST['id'];
-//                    echo "<script>console.log(" . json_encode("EDITAR") . ");</script>";
                     $resultado = $pokedex->editarPokemon($id, $nombre, $numero, $descripcion, $imagen, $tipos); // Método para editar Pokémon
                 } else {
-//                    echo "<script>console.log(" . json_encode("CREAR") . ")</script>";
                     $resultado = $pokedex->agregarPokemon($nombre, $numero, $descripcion, $imagen, $tipos);
                 }
 
@@ -117,8 +123,8 @@
             }
         }
         ?>
-        <button type="submit" class="add-pokemon-btn"><?php echo isset($pokemon) ? 'Guardar Cambios' : 'Agregar Pokémon'; ?></button>
-
+        <button type="submit"
+                class="add-pokemon-btn"><?php echo isset($pokemon) ? 'Guardar Cambios' : 'Agregar Pokémon'; ?></button>
 
 
     </form>
