@@ -1,6 +1,6 @@
 <?php
 require_once 'BaseDeDatos/Database.php';
-require_once 'Pokedex.php';
+require_once 'pokedex.php';
 
 if (isset($_GET['id']) && is_numeric($_GET['id'])) {
     $id = $_GET['id'];
