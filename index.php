@@ -98,9 +98,12 @@ $filtro = isset($_GET['filtro']) ? $_GET['filtro'] : "";
     ?>
 </div>
 
-<div class="add-pokemon">
-    <a href="agregar.php" class="add-pokemon-btn">+ Agregar Pokémon</a>
-</div>
+<?php if (isset($_SESSION['username'])){
+    echo '<div class="add-pokemon">';
+    echo '    <a href="agregar.php" class="add-pokemon-btn">+ Agregar Pokémon</a> ';
+    echo '</div>';}
+
+?>
 <?php require_once 'footer.php'; ?>
 
 <script>

@@ -5,6 +5,17 @@ body {
     padding: 0;
 }
 
+.header {
+    background-color: #E3350D;
+    padding: 20px;
+    text-align: center;
+}
+
+.header img {
+    max-width: 200px;
+    height: auto;
+}
+
 .container {
     display: flex;
     justify-content: space-between;
@@ -39,7 +50,7 @@ body {
 
 .filter {
     margin-left: 20px;
-    margin-right: 20px;
+    margin-right: 100px;
 }
 
 .filter select {
@@ -124,29 +135,285 @@ body {
 
 /* Botón de agregar Pokémon */
 .add-pokemon {
+    position: fixed; /* Fijo en relación al viewport */
+    bottom: 20px; /* Distancia desde el fondo */
+    right: 20px; /* Distancia desde la derecha */
+    z-index: 1000; /* Asegúrate de que se muestre encima de otros elementos */
     grid-column: 1 / -1; /* Ocupa toda la fila */
-    text-align: center;
-    margin-top: 20px;
+    text-align: center; /* Centrar contenido */
+    margin-top: 20px; /* Espacio superior */
 }
 
 .add-pokemon-btn {
-    display: inline-block;
-    padding: 10px 20px;
-    background-color: #f8e042;
-    color: white;
-    border: none;
-    border-radius: 40px;
-    text-decoration: none;
-    font-weight: bold;
-    font-size: 16px;
-    cursor: pointer;
+    display: inline-block; /* Para que se comporte como un botón */
+    padding: 10px 20px; /* Espaciado interno */
+    background-color: #f8e042; /* Color de fondo */
+    color: white; /* Color del texto */
+    border: none; /* Sin borde */
+    border-radius: 40px; /* Bordes redondeados */
+    text-decoration: none; /* Sin subrayado */
+    font-weight: bold; /* Texto en negrita */
+    font-size: 16px; /* Tamaño de la fuente */
+    cursor: pointer; /* Cambiar el cursor a puntero */
 }
 
 .add-pokemon-btn:hover {
-    background-color: #E3350D;
+    background-color: #E3350D; /* Color de fondo al pasar el ratón */
 }
 
+.back-arrow {
+    position: fixed; /* Fijo en relación al viewport */
+    top: 20px; /* Distancia desde la parte superior */
+    left: 20px; /* Distancia desde la izquierda */
+    background-color: #f8e042; /* Color de fondo */
+    color: white; /* Color del texto */
+    padding: 10px; /* Espaciado interno */
+    border-radius: 5px; /* Bordes redondeados */
+    text-decoration: none; /* Sin subrayado */
+    font-weight: bold; /* Texto en negrita */
+    font-size: 16px; /* Tamaño de la fuente */
+    z-index: 1000; /* Asegúrate de que se muestre encima de otros elementos */
+}
 
+.back-arrow:hover {
+    background-color: #E3350D; /* Color de fondo al pasar el ratón */
+}
+
+/* VISTA AGREGAR POKEMON */
+.container-add {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    background-color: #eee;
+    width: 50%;
+    margin: 3rem auto;
+    min-height: calc(100vh - 60px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.form-add {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    max-width: 600px;
+    padding: 20px;
+    border-radius: 8px;
+}
+
+.form-group-add {
+    margin-bottom: 15px;
+    margin-right: 1.2rem;
+}
+
+.form-group-add-nombre {
+    margin-right: 2rem;
+    /*width: -webkit-fill-available;*/
+}
+
+.form-group-doble {
+    display: flex;
+}
+
+label {
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+input[type="text"],
+input[type="number"],
+input[type="file"],
+textarea,
+select {
+    width: 100%;
+    padding: 10px;
+    margin: 5px 0 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+.pokemon-types {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.pokemon-types .tipo-label {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    cursor: pointer;
+    transition: transform 0.2s ease-in-out;
+    border: 2px solid transparent;
+    padding: 5px;
+    border-radius: 8px;
+}
+
+.pokemon-types img {
+    width: auto;
+    height: 1.5rem;
+    border-radius: 10%;
+    transition: filter 0.3s ease, transform 0.2s ease;
+}
+
+.pokemon-types .tipo-label.selected img {
+    filter: grayscale(100%);
+    transform: scale(1.1);
+}
+
+.pokemon-types .tipo-label.selected {
+    border-color: #f8e042;
+}
+
+.pokemon-types span {
+    margin-top: 5px;
+    font-size: 14px;
+    text-align: center;
+    color: #333;
+}
+
+.pokemon-types .tipo-label:hover img {
+    transform: scale(1.1);
+}
+
+.container-msj{
+    display: flex;
+    justify-content: center;
+    margin-top: 2rem;
+}
+
+.mensaje {
+    padding: 15px;
+    margin-bottom: 20px;
+    border-radius: 5px;
+    font-size: 16px;
+    font-weight: bold;
+    text-align: center;
+}
+
+.exito {
+    background-color: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+}
+
+.error {
+    background-color: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+}
+
+.action-icon {
+    width: 24px;
+    height: 24px;
+    cursor: pointer;
+    opacity: 0.8;
+}
+
+.form-group-img {
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+}
+
+.input-img{
+    width: 18rem;
+}
+
+/* Responsividad */
+@media (max-width: 768px) {
+    .container-add {
+        width: 80%;
+    }
+
+    .form-add {
+        max-width: 100%;
+    }
+}
+
+@media (max-width: 480px) {
+    .container-add {
+        width: 86%;
+        margin-top: 2rem;
+        display: flex;
+        justify-content: flex-start;
+        min-height: auto;
+    }
+
+    input[type="text"],
+    input[type="number"],
+    input[type="file"],
+    textarea,
+    select {
+        font-size: 14px;
+        /*width: -webkit-fill-available;*/
+    }
+
+    button[type="submit"] {
+        font-size: 14px;
+    }
+
+    .form-group-doble {
+        display: contents;
+    }
+
+    .form-group-add-nombre {
+        margin-bottom: 15px;
+        margin-right: 0;
+    }
+
+    .form-group-add {
+        margin-right: 0;
+    }
+
+}
+
+/*FOOTER*/
+.footer {
+    background-color: #FF0000;
+    color: white;
+    text-align: center;
+    padding: 20px 0; /* Más pequeño que el original */
+    font-size: 14px; /* Reducimos el tamaño de fuente */
+    position: relative;
+    bottom: 0;
+    width: 100%;
+}
+
+.footer .footer-logo {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 10px;
+}
+
+.footer .footer-logo img {
+    max-width: 120px; /* Ajustamos el tamaño del logo */
+    height: auto;
+}
+
+.footer .footer-content {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    max-width: 900px; /* Ancho máximo del contenido del footer */
+    margin: 0 auto; /* Centra el contenido */
+    flex-wrap: wrap;
+}
+
+.footer .section {
+    flex: 1;
+    margin-bottom: 10px;
+}
+
+.footer .section h4 {
+    margin: 5px 0;
+}
+
+.footer .section p {
+    margin: 0;
+}
 
 /* Estilos responsivos */
 @media (max-width: 1200px) {
@@ -165,6 +432,14 @@ body {
         grid-template-columns: repeat(2, 1fr); /* 2 columnas en pantallas pequeñas */
     }
 
+    footer .footer-content {
+        flex-direction: column;
+
+    }
+
+    .footer .section {
+        margin-bottom: 15px;
+    }
 }
 
 @media (max-width: 480px) {
